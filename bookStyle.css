@@ -10,7 +10,9 @@ body {
   align-items: center;
 }
 h1 {
-  margin-left: 18em;
+  margin-left: 17em;
+  color: brown;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 .book-list,
 .cart-list {
@@ -54,4 +56,39 @@ button {
 .book-image {
   width: 200px;
   height: 200px;
+}
+
+.display {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  max-width: 150px;
+  max-height: 40px;
+}
+
+.btn {
+  background-color: black;
+  color: white;
+}
+
+.clear-cart-btn {
+  height: 53px;
+  width: 80px;
+  padding: 12px 25px;
+  font-size: 16px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.clear-cart-btn:hover {
+  background-color: #d32f2f;
+}
+
+.clear-cart-btn:disabled {
+  background-color: #dcdcdc;
+  cursor: not-allowed;
 }
