@@ -60,7 +60,13 @@ function displayBooks() {
 
 function addToCart(id) {
   const book = books.find((b) => b.id === id);
-  cart.push(book);
+  const existingBook = cart.find((item) => item.id === id);
+
+  if (existingBook) {
+    existingBook.quantity += 1;
+  } else {
+    cart.push({ ...book, quantity: 1 });
+  }
   localStorage.setItem("cart", JSON.stringify(cart));
   alert(`${book.title} added to cart`);
 }
