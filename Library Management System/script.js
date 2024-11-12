@@ -17,6 +17,7 @@ Library.addBook(createBook("The 5am club", "Robin Sharma"));
 Library.addBook(createBook("The guide", "R K Narayan"));
 Library.addBook(createBook("Making India Awesome", "Chetan Bhagat"));
 Library.addBook(createBook("Godan", "Prem Chand"));
+Library.addBook(createBook("Halmet", "William SHakespeare"));
 
 // Book Factory Function
 function createBook(title, author) {
@@ -28,8 +29,9 @@ function createBook(title, author) {
 }
 
 // User Constructor Function and Prototype Methods
-function User(name) {
+function User(name, id) {
   this.name = name;
+  this.id = id || "N/A";
   this.borrowedBooks = [];
 }
 
@@ -105,13 +107,19 @@ function updateBorrowedBooksDropdown() {
   const dropdown = document.getElementById("borrowed-books-dropdown");
   dropdown.innerHTML = "";
 
-  if (currentUser) {
+  if (currentUser && currentUser.borrowedBooks.length > 0) {
     currentUser.borrowedBooks.forEach((book) => {
       const option = document.createElement("option");
       option.value = book.title;
       option.textContent = `${book.title}`;
       dropdown.appendChild(option);
     });
+  } else {
+    // If no books borrowed, show placeholder
+    const option = document.createElement("option");
+    option.value = "";
+    option.textContent = "No borrowed books";
+    dropdown.appendChild(option);
   }
 }
 
@@ -128,8 +136,8 @@ function updateUserDetails() {
 
     userInfo.innerHTML = `
         <h3>${user.name}</h3>
-        <p>Membership ID: ${user.membershipId || "N/A"}</p>
-        <p>Borrowed Books: ${borrowedBooks}</p>
+        <div>Membership ID: ${user.membershipId || "N/A"}</div>
+        <div>Borrowed Books: ${borrowedBooks}</div>
       `;
 
     userDetails.appendChild(userInfo);
@@ -170,6 +178,12 @@ function updateUserDropdown() {
 
   // Automatically set the first user as selected after dropdown update
   setCurrentUser();
+
+  // Add event listener to update currentUser and borrowed books dropdown on user change
+  dropdown.addEventListener("change", () => {
+    setCurrentUser();
+    updateBorrowedBooksDropdown();
+  });
 }
 
 function setCurrentUser() {

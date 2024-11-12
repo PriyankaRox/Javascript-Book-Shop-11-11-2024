@@ -3,4 +3,4 @@
 ## Building a Simple Library Management System using JavaScript OOP Concepts
 
 
-![alt text](KnowledgeHub.png)
+![alt text](<Knowledge Hub.png>)
