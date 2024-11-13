@@ -119,3 +119,11 @@ console.log(processInputs("Hello TypeScript"));
 console.log(processInputs(42.89));
 console.log(processInputs(true));
 console.log(processInputs([1, 2, 3, 4]));
+// enum
+var status;
+(function (status) {
+    status[status["success"] = 0] = "success";
+    status[status["failure"] = 1] = "failure";
+    status[status["pending"] = 2] = "pending";
+})(status || (status = {}));
+console.log("Status", status.success);

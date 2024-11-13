@@ -146,4 +146,13 @@ function processInput(input: string | number | boolean | number[]) {
   console.log(processInputs(true));              
   console.log(processInputs([1, 2, 3, 4]));
 
+// enum
+enum status {
+  success,
+  failure,
+  pending
+}
+
+console.log("Status",status.success);
+
 export{}
