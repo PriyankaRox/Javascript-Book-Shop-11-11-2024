@@ -8,28 +8,24 @@ interface User {
   avatar: string;
 }
 
-const User: React.FC = () => {
+const Users: React.FC = () => {
   useEffect(() => {
-    // Fetch user data from the API
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("https://reqres.in/api/users");
+        const data = await response.json();
+        populateTable(data.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
     fetchUsers();
   }, []);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch("https://reqres.in/api/users");
-      const data = await response.json();
-
-      // Populate table rows using DOM Manipulation
-      populateTable(data.data);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
 
   const populateTable = (users: User[]) => {
     const tableBody = document.getElementById("user-table-body");
     if (tableBody) {
-      tableBody.innerHTML = ""; // Clear previous rows
+      tableBody.innerHTML = "";
       users.forEach((user) => {
         const row = document.createElement("tr");
         const idCell = document.createElement("td");
@@ -56,27 +52,21 @@ const User: React.FC = () => {
         removeButton.style.border = "none";
         removeButton.style.padding = "5px 10px";
         removeButton.style.cursor = "pointer";
-
-        // Attach click handler for removing the row
         removeButton.onclick = () => row.remove();
 
         removeCell.appendChild(removeButton);
-
-        // Append all cells to the row
         row.appendChild(idCell);
         row.appendChild(nameCell);
         row.appendChild(emailCell);
         row.appendChild(avatarCell);
         row.appendChild(removeCell);
-
-        // Append the row to the table body
         tableBody.appendChild(row);
       });
     }
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "0 0 0 220px" }}>
       <h1>User Data Table</h1>
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
@@ -94,4 +84,4 @@ const User: React.FC = () => {
   );
 };
 
-export default User;
+export default Users;
