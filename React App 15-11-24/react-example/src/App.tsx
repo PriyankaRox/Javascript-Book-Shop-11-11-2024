@@ -3,6 +3,7 @@ import "./App.css";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import Employee from "./employee_data/Employee";
 import Users from "./user_details/Users";
+import Todo from "./todo_15-11-2024/Todo";
 import Use_Memo from "./18-11-24/Use_Memo";
 import Customer from "./18-11-24/Customer";
 import UseLayoutEffect from "./18-11-24/UseLayoutEffect";
@@ -43,7 +44,7 @@ function App() {
           <Routes>
             <Route path="/employee" element={<Employee />} />
             <Route path="/user" element={<Users />} />
-            {/* <Route path="/todo" element={<Todo />} /> */}
+            <Route path="/todo" element={<Todo />} />
             <Route path="/useMemo" element={<Use_Memo items={items} />} />
             <Route path="/customer" element={<Customer />} />
             <Route path="/callBack" element={<UseLayoutEffect />} />
