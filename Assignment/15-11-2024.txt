@@ -1,0 +1,446 @@
+Todo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Todo.tsx
+import React, { useState } from "react";
+import TodoItem from "./TodoItem";
+import "./todo.css";
+
+interface Task {
+  id: number;
+  text: string;
+  completed: boolean;
+}
+
+interface TodoItemProps {
+  task: Task;
+  deleteTask: (id: number) => void;
+  toggleCompleted: (id: number) => void;
+}
+
+const TodoList: React.FC<TodoItemProps> = ({
+  task,
+  deleteTask,
+  toggleCompleted,
+}) => {
+  return (
+    <div className="todo">
+      <span
+        style={{
+          textDecoration: task.completed ? "line-through" : "none",
+          cursor: "pointer",
+        }}
+        onClick={() => toggleCompleted(task.id)}
+      >
+        {task.text}
+      </span>
+      <button onClick={() => deleteTask(task.id)}>Delete</button>
+    </div>
+  );
+};
+
+const Todo: React.FC = () => {
+  const [tasks, setTasks] = useState<Task[]>([
+    { id: 1, text: "Doc appointment", completed: false },
+    { id: 2, text: "Meeting with client", completed: false },
+  ]);
+  const [text, setText] = useState<string>("");
+
+  const addTask = (text: string): void => {
+    const newTask: Task = {
+      id: Date.now(),
+      text,
+      completed: false,
+    };
+    setTasks([...tasks, newTask]);
+    setText("");
+  };
+
+  const deleteTask = (id: number): void => {
+    setTasks(tasks.filter((task) => task.id !== id));
+  };
+
+  const toggleCompleted = (id: number): void => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
+  };
+  return (
+    <div className="todo">
+      <h2>Todo List</h2>
+
+      <label>Enter todo list here:</label>
+      <input
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Add new task"
+      />
+      <button onClick={() => addTask(text)}>Add</button>
+      <div className="todo-list">
+        {tasks.map((task) => (
+          <TodoList
+            key={task.id}
+            task={task}
+            deleteTask={deleteTask}
+            toggleCompleted={toggleCompleted}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+export default Todo;
+
+TodoItem.tsx
+
+import React from "react";
+
+interface Task {
+  id: number;
+  text: string;
+  completed: boolean;
+}
+
+interface TodoItemProps {
+  task: Task;
+  deleteTask: (id: number) => void;
+  toggleCompleted: (id: number) => void;
+}
+
+const TodoItem: React.FC<TodoItemProps> = ({
+  task,
+  deleteTask,
+  toggleCompleted,
+}) => {
+  const handleChange = () => {
+    toggleCompleted(task.id);
+  };
+
+  return (
+    <div className="todo">
+      <input type="checkbox" checked={task.completed} onChange={handleChange} />
+      <p>{task.text}</p>
+      <button onClick={() => deleteTask(task.id)}>X</button>
+    </div>
+  );
+};
+export default TodoItem;
+
+todo.css
+
+.todo {
+  margin: 10px;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+button {
+  background-color: green;
+  color: white;
+  margin: 3px;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+User ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+import React, { useEffect } from "react";
+
+interface User {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  avatar: string;
+}
+
+const Users: React.FC = () => {
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("https://reqres.in/api/users");
+        const data = await response.json();
+        populateTable(data.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+  const populateTable = (users: User[]) => {
+    const tableBody = document.getElementById("user-table-body");
+    if (tableBody) {
+      tableBody.innerHTML = "";
+      users.forEach((user) => {
+        const row = document.createElement("tr");
+        const idCell = document.createElement("td");
+        idCell.textContent = user.id.toString();
+
+        const nameCell = document.createElement("td");
+        nameCell.textContent = `${user.first_name} ${user.last_name}`;
+
+        const emailCell = document.createElement("td");
+        emailCell.textContent = user.email;
+
+        const avatarCell = document.createElement("td");
+        const avatarImg = document.createElement("img");
+        avatarImg.src = user.avatar;
+        avatarImg.alt = `${user.first_name}'s avatar`;
+        avatarImg.style.width = "50px";
+        avatarImg.style.height = "50px";
+        avatarCell.appendChild(avatarImg);
+        const removeCell = document.createElement("td");
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "Remove";
+        removeButton.style.background = "red";
+        removeButton.style.color = "white";
+        removeButton.style.border = "none";
+        removeButton.style.padding = "5px 10px";
+        removeButton.style.cursor = "pointer";
+        removeButton.onclick = () => row.remove();
+
+        removeCell.appendChild(removeButton);
+        row.appendChild(idCell);
+        row.appendChild(nameCell);
+        row.appendChild(emailCell);
+        row.appendChild(avatarCell);
+        row.appendChild(removeCell);
+        tableBody.appendChild(row);
+      });
+    }
+  };
+
+  return (
+    <div style={{ padding: "0 0 0 220px" }}>
+      <h1>User Data Table</h1>
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Avatar</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="user-table-body"></tbody>
+      </table>
+    </div>
+  );
+};
+
+export default Users;
+
+Employee ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+import React, { useState } from "react";
+import "./employee.css";
+
+interface EmployeeData {
+  empNo: number;
+  empName: string;
+  empjob: string;
+  empSalary: number;
+}
+
+const Employee = () => {
+  const [employee, setEmployee] = useState<EmployeeData>({
+    empNo: 0,
+    empName: "",
+    empjob: "",
+    empSalary: 0,
+  });
+  const [employeeInfo, setEmployeeInfo] = useState<EmployeeData[]>([]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEmployee({
+      ...employee,
+      [name]: name === "empNo" || name === "empSalary" ? Number(value) : value,
+    });
+  };
+
+  const handleAddEmployee = () => {
+    if (
+      employee.empNo &&
+      employee.empName &&
+      employee.empjob &&
+      employee.empSalary
+    ) {
+      setEmployeeInfo([...employeeInfo, employee]);
+      setEmployee({
+        empNo: 0,
+        empName: "",
+        empjob: "",
+        empSalary: 0,
+      });
+    } else {
+      alert("Please add the details!");
+    }
+  };
+
+  return (
+    <div className="container">
+      <h1>Employee Data</h1>
+      <div className="employee-view">
+        <div>
+          <div className="sub-employee-view">
+            <label>Employee No:</label>
+            <input
+              type="number"
+              name="empNo"
+              value={employee.empNo || ""}
+              onChange={handleChange}
+              placeholder="Enter Employee No"
+            />
+          </div>
+          <div className="sub-employee-view">
+            <label>Job:</label>
+            <input
+              type="text"
+              name="empjob"
+              value={employee.empjob}
+              onChange={handleChange}
+              placeholder="Enter Employee Job"
+            />
+          </div>
+        </div>
+        <div>
+          <div className="sub-employee-view">
+            <label>Employee Name:</label>
+            <input
+              type="string"
+              name="empName"
+              value={employee.empName}
+              onChange={handleChange}
+              placeholder="Enter Employee Name"
+            />
+          </div>
+          <div className="sub-employee-view">
+            <label>Salary:</label>
+            <input
+              type="number"
+              name="empSalary"
+              value={employee.empSalary || ""}
+              onChange={handleChange}
+              placeholder="Enter Employee Salary"
+            />
+          </div>
+        </div>
+      </div>
+      <div>
+        <button onClick={handleAddEmployee}>Add Employee</button>
+      </div>
+      <div className="employee-table-view">
+        <h2>Employee List</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Emp No</th>
+              <th>Name</th>
+              <th>Job</th>
+              <th>Salary</th>
+            </tr>
+          </thead>
+          <tbody>
+            {employeeInfo.map((emp, index) => (
+              <tr key={index}>
+                <td>{emp.empNo}</td>
+                <td>{emp.empName}</td>
+                <td>{emp.empjob}</td>
+                <td>{emp.empSalary}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+export default Employee;
+
+employee.css
+
+.container {
+  position: relative;
+  margin-left: 200px;
+  max-width: 100%;
+  /* height: 100%; */
+  padding: 20px;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  /* margin: 10px; */
+  background-color: rgb(220, 238, 208);
+}
+
+.employee-view {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+}
+
+.sub-employee-view {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+input {
+  margin: 5px;
+  width: 200px;
+  height: 20px;
+}
+
+button {
+  width: 140px;
+  height: 30px;
+  background-color: gray;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.employee-table-view {
+  margin: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.employee-table-view table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.employee-table-view th,
+.employee-table-view td {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 8px;
+  text-align: center;
+  background-color: #ddd;
+}
+
+.employee-table-view th {
+  background-color: #857b7b;
+}

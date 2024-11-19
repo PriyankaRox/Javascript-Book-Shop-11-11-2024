@@ -1,3 +1,4 @@
+import React, { useState, createContext, Component } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
@@ -7,17 +8,70 @@ import Todo from "./todo_15-11-2024/Todo";
 import Use_Memo from "./18-11-24/Use_Memo";
 import Customer from "./18-11-24/Customer";
 import UseLayoutEffect from "./18-11-24/UseLayoutEffect";
+import UserList from "./HOC/UserList";
+import Childs from "./19-11-2024/Childs";
+import { contextObjs, UserInfo } from "./19-11-2024/context";
+import DemoHoc from "./19-11-2024/DemoHoc";
+import DemoHocGrid from "./19-11-2024/DemoHocGrid";
+// import Child from "./UseContext/Child";
 
-function App() {
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+//1. Context Creation for functional
+export const contextObj = React.createContext<User | null>(null);
+
+class MyContextApi extends Component {
+  userObj: UserInfo = {
+    id: 1,
+    name: "Max Tow",
+    email: "max@gmail.com",
+  };
+  render() {
+    return (
+      <div style={{ margin: "10px", border: "2px solid red" }}>
+        <h3>This is App Class Component</h3>
+        <hr />
+        {/* Context provider */}
+        <contextObjs.Provider value={this.userObj}>
+          <Childs />
+        </contextObjs.Provider>
+      </div>
+    );
+  }
+}
+
+interface UserHoc {
+  id: number;
+  name: string;
+  email: string;
+  address: string;
+  company: string;
+}
+
+const HocData = DemoHoc<UserHoc>(DemoHocGrid);
+
+const App: React.FC = () => {
   const items = [
     { id: 1, name: "apple" },
     { id: 2, name: "banana" },
     { id: 3, name: "cherry" },
   ];
+
+  // const [userObj, setUserObj] = useState<User>({
+  //   id: 1,
+  //   name: "Scott",
+  //   email: "scott@gmail.com",
+  // });
+
   return (
     <Router>
       <div className="App">
         <header className="App-header">React App Demo</header>
+
         <Sidebar>
           <Menu className="sidebar">
             <MenuItem>
@@ -38,6 +92,15 @@ function App() {
             <MenuItem>
               <Link to="/callBack">UseLayoutEffect</Link>
             </MenuItem>
+            <MenuItem>
+              <Link to="/hoc">HOC</Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to="/useContext">Context API</Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to="/gridHoc">Grid HOC Demo</Link>
+            </MenuItem>
           </Menu>
         </Sidebar>
         <div className="content">
@@ -48,11 +111,45 @@ function App() {
             <Route path="/useMemo" element={<Use_Memo items={items} />} />
             <Route path="/customer" element={<Customer />} />
             <Route path="/callBack" element={<UseLayoutEffect />} />
+            <Route
+              path="/hoc"
+              element={
+                <UserList url="https://jsonplaceholder.typicode.com/users" />
+              }
+            />
+            <Route path="/useContext" element={<MyContextApi />} />
+            <Route
+              path="/gridHoc"
+              element={
+                <HocData
+                  url="https://jsonplaceholder.typicode.com/users"
+                  dataProperties={["id", "name", "email"]}
+                />
+              }
+            />
+
+            {/* functional Component context example */}
+            {/* <Route
+              path="/useContext"
+              element={
+                <contextObj.Provider value={userObj}>
+                  <Child />
+                </contextObj.Provider>
+              }
+            /> */}
           </Routes>
         </div>
+        {/* <div style={{ margin: "10px", border: "2px solid red" }}>
+        <h3>This is App Component</h3>
+        <hr /> */}
+        {/* 2. Context Provider  */}
+        {/* <contexObj.Provider value={userObj}>
+          <Child />
+        </contexObj.Provider> */}
+        {/* </div> */}
       </div>
     </Router>
   );
-}
+};
 
 export default App;

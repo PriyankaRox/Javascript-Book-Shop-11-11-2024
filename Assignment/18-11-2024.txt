@@ -1,0 +1,225 @@
+Customer ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// Create a react component to display customer details with below url:
+
+// 		https://www.w3schools.com/angular/customers.php
+
+// 		a.  In page load it should display all customers
+// 		b.  Provide drop-down that shows Country names
+// 		c.  Data should update if the user change the country
+
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "./customer.css";
+
+interface CustomerDetails {
+  id: number;
+  Name: string;
+  City: string;
+  Country: string;
+}
+
+const Customer: React.FC = () => {
+  const [data, setData] = useState<CustomerDetails[]>([]);
+  const [countries, setCountries] = useState<string[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [filteredData, setFilteredData] = useState<CustomerDetails[]>([]);
+
+  useEffect(() => {
+    const URL = "https://www.w3schools.com/angular/customers.php";
+    axios.get(URL).then((resData) => {
+      const customers = resData.data.records;
+      setData(customers);
+      setFilteredData(customers);
+
+      const myCountries = Array.from(
+        new Set<string>(
+          customers.map((customer: CustomerDetails) => customer.Country)
+        )
+      );
+      setCountries(myCountries);
+    });
+  }, []);
+
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const country = e.target.value;
+    setSelectedCountry(country);
+
+    const updatedData =
+      country === ""
+        ? data
+        : data.filter((customer) => customer.Country === country);
+    setFilteredData(updatedData);
+  };
+
+  return (
+    <div className="container">
+      <h2>Customer Details</h2>
+      <div className="drop-down">
+        <label htmlFor="country-select">Filter by Country:</label>
+        <select
+          id="country-select"
+          value={selectedCountry}
+          onChange={handleCountryChange}
+        >
+          <option value="">All Countries</option>
+          {countries.map((country, index) => (
+            <option key={index} value={country}>
+              {country}
+            </option>
+          ))}
+        </select>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>City</th>
+            <th>Country</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredData.map((item) => (
+            <tr key={item.id}>
+              <td>{item.Name}</td>
+              <td>{item.City}</td>
+              <td>{item.Country}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default Customer;
+
+customer.css
+
+/* .container {
+  font-family: Georgia, "Times New Roman", Times, serif;
+} */
+
+table {
+  border: 2px solid black;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table tr {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+table th {
+  color: white;
+  border: 1px solid black;
+  background-color: rgb(255, 115, 0);
+}
+
+table td {
+  border: 1px solid black;
+}
+
+table tr:nth-child(even) {
+  background-color: pink;
+}
+
+table tr:nth-child(odd) {
+  background-attachment: white;
+}
+
+.drop-down {
+  margin: 15px;
+}
+
+
+UseMemo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//useMemo Hook is used to memoize the value and used for complex queries and recomputational tasks, it prevents from being recomputation on every render if dependencies remain unchanged
+// When to Use useMemo?
+// – Data Formatting
+// – Filtering Data
+// – Sorting Data
+// – Memoizing Callback Functions
+// – Expensive Calculations
+
+import React, { useMemo } from "react";
+
+interface Item {
+  id: number;
+  name: string;
+}
+
+interface UseMemoProps {
+  items: Item[];
+}
+
+const Use_Memo: React.FC<UseMemoProps> = ({ items }) => {
+  const myItems = useMemo(() => newItems(items), [items]);
+  return (
+    <div>
+      <h1>Use Memo Demo</h1>
+      <ul>
+        {myItems.map((item) => (
+          <li key={item.id}>{item.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const newItems = (items: Item[]): Item[] => {
+  return items.map((item) => ({ id: item.id, name: item.name.toUpperCase() }));
+};
+
+export default Use_Memo;
+
+UseLayoutEffect and Usecallback ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// Create a react component to apply fading effect to heading tag using useLayoutEffect()  hook.
+
+import React, { useState, useLayoutEffect, useCallback } from "react";
+
+const UseLayoutEffect: React.FC = () => {
+  const [opacity, setOpacity] = useState(1);
+  const [direction, setDirection] = useState<"fade-in" | "fade-out">(
+    "fade-out"
+  );
+
+  // useCallback to toggle the fade direction
+  const toggleFade = useCallback(() => {
+    setDirection((prevDirection) =>
+      prevDirection === "fade-out" ? "fade-in" : "fade-out"
+    );
+  }, []);
+
+  // useLayoutEffect to handle the fade effect
+  useLayoutEffect(() => {
+    const interval = setInterval(() => {
+      setOpacity((prevOpacity) => {
+        if (direction === "fade-out") {
+          return prevOpacity > 0 ? prevOpacity - 0.1 : 0;
+        } else {
+          return prevOpacity < 1 ? prevOpacity + 0.1 : 1;
+        }
+      });
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [direction]);
+
+  return (
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <h1 style={{ opacity, transition: "opacity 0.1s linear" }}>
+        Fading Heading
+      </h1>
+      <button onClick={toggleFade} style={{ marginTop: "20px" }}>
+        Toggle Fade
+      </button>
+    </div>
+  );
+};
+
+export default UseLayoutEffect;
+
