@@ -1,0 +1,20 @@
+.content-app {
+  padding: 20px;
+  text-align: center;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+.input-app {
+  padding: 10px;
+  margin-right: 10px;
+}
+
+.btn-app {
+  padding: 10px 20px;
+  margin-right: 10px;
+}
+
+.subContent-app {
+  display: flex;
+  flex-direction: column;
+}

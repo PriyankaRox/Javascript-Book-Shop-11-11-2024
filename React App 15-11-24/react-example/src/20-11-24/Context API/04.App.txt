@@ -1,0 +1,12 @@
+import React from "react";
+import { AuthProvider } from "./components/AuthProvider";
+import UserProfile from "./components/UserProfile";
+ 
+
+const App: React.FC = () => (
+  <AuthProvider>
+    <UserProfile />
+  </AuthProvider>
+);
+
+export default App;
