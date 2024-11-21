@@ -14,7 +14,7 @@ const Demo = () => {
   useEffect(() => {
     // Fetch data from JSON Server
     axios
-      .get('http://localhost:5000/posts')
+      .get('http://localhost:3002/posts')
       .then((response) => {
         setPosts(response.data);
         console.log("author",response.data)

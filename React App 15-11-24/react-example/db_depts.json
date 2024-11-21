@@ -1,0 +1,19 @@
+{
+  "depts": [
+    {
+      "deptno": 40,
+      "dname": "Marketing",
+      "loc": "Pune"
+    },
+    {
+      "deptno": 30,
+      "dname": "Admin",
+      "loc": "Mumbai"
+    },
+    {
+      "deptno": 20,
+      "dname": "Sales",
+      "loc": "Chennaiop"
+    }
+  ]
+}

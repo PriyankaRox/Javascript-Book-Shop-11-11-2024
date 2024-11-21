@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 // Custom hook to manage localStorage operations
 function useStorage<T>(key: string) {

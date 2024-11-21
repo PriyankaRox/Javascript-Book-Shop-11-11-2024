@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
 interface User {
   id: number;
@@ -66,7 +66,7 @@ const Users: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: "0 0 0 220px" }}>
+    <div>
       <h1>User Data Table</h1>
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>

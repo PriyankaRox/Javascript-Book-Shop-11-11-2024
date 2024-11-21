@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 interface GridTableProps<T> {
   data: T[];
@@ -26,47 +26,49 @@ class DemoHocGrid<T extends Record<string, any>> extends Component<
 
     // Render table
     return (
-      <table
-        style={{
-          borderCollapse: "collapse",
-          tableLayout: "fixed",
-          width: "80%",
-          border: "1px solid black",
-          marginLeft: "240px",
-        }}
-      >
-        <thead>
-          <tr>
-            {Object.keys(data[0] || {}).map((key) => (
-              <th
-                style={{ border: "1px solid black", padding: "8px" }}
-                key={key}
-              >
-                {key}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => (
-            <tr key={index}>
-              {Object.values(item).map((value, idx) => (
-                <td
-                  style={{
-                    border: "1px solid black",
-                    padding: "8px",
-                    width: "50%",
-                    wordWrap: "break-word",
-                  }}
-                  key={idx}
+      <div>
+        <h1>Grid HOC Demo</h1>
+        <table
+          style={{
+            borderCollapse: "collapse",
+            tableLayout: "fixed",
+            width: "100%",
+            border: "1px solid black",
+          }}
+        >
+          <thead>
+            <tr>
+              {Object.keys(data[0] || {}).map((key) => (
+                <th
+                  style={{ border: "1px solid black", padding: "8px" }}
+                  key={key}
                 >
-                  {this.renderValue(value)}
-                </td>
+                  {key}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.map((item, index) => (
+              <tr key={index}>
+                {Object.values(item).map((value, idx) => (
+                  <td
+                    style={{
+                      border: "1px solid black",
+                      padding: "8px",
+                      width: "50%",
+                      wordWrap: "break-word",
+                    }}
+                    key={idx}
+                  >
+                    {this.renderValue(value)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     );
   }
 }

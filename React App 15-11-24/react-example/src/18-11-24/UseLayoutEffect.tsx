@@ -1,6 +1,10 @@
 // Create a react component to apply fading effect to heading tag using useLayoutEffect()  hook.
 
-import React, { useState, useLayoutEffect, useCallback } from "react";
+import React, {
+  useCallback,
+  useLayoutEffect,
+  useState,
+} from 'react';
 
 const UseLayoutEffect: React.FC = () => {
   const [opacity, setOpacity] = useState(1);
@@ -31,7 +35,8 @@ const UseLayoutEffect: React.FC = () => {
   }, [direction]);
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
+    <div style={{ textAlign: "center" }}>
+      <h1>Use Layout Demo</h1>
       <h1 style={{ opacity, transition: "opacity 0.1s linear" }}>
         Fading Heading
       </h1>

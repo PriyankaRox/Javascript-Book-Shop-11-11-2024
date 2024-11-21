@@ -9,9 +9,10 @@
 // Performance optimizations: Optimizing performance
 // Memory management: Managing memory and garbage collection
 
-import React, { useState } from "react";
-import { useQuery } from "react-query";
-import axios from "axios";
+import React, { useState } from 'react';
+
+import axios from 'axios';
+import { useQuery } from 'react-query';
 
 // Define the type for a single post
 interface Post {
@@ -51,7 +52,8 @@ const ReactQuery: React.FC = () => {
 
   return (
     <div>
-      <h1>Post Titles</h1>
+      <h1>React Query Demo</h1>
+      <h2>Post Titles</h2>
       <ul>
         {displayedPosts.map((post) => (
           <li key={post.id}>{post.title}</li>

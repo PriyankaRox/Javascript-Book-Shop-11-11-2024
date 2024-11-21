@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-import withFetchHoc from "./withFetchHoc";
+import React, { Component } from 'react';
+
+import withFetchHoc from './withFetchHoc';
 
 type User = {
   id: number;
@@ -17,7 +18,8 @@ class UserList extends Component<UserListProps> {
 
     return (
       <div>
-        <h1>User List</h1>
+        <h1>Higher Order Component Demo</h1>
+        <h2>User List</h2>
         <ul>
           {data?.map((user) => (
             <li key={user.id}>
