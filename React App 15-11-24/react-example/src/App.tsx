@@ -20,6 +20,7 @@ import TodoApp from "./20-11-24/TodoApp";
 import BankApp from "./20-11-24/Assignment/BankApp";
 import { QueryClient, QueryClientProvider } from "react-query";
 import ReactQuery from "./20-11-24/Assignment/ReactQuery";
+import Demo from "./20-11-24/Assignment/Demo";
 // import Child from "./UseContext/Child";
 
 // Create a QueryClient instance
@@ -115,6 +116,9 @@ const App: React.FC = () => {
                 <Link to="/query">React Query</Link>
               </MenuItem>
               <MenuItem>
+                <Link to="/db">JSON Demo</Link>
+              </MenuItem>
+              <MenuItem>
                 <Link to="/employee">Employee</Link>
               </MenuItem>
               <MenuItem>
@@ -182,6 +186,8 @@ const App: React.FC = () => {
               <Route path="/bank" element={<BankApp />} />
 
               <Route path="/query" element={<AppQuery />} />
+
+              <Route path="/db" element={<Demo />} />
 
               {/* <Route path="storage" element={<useStorage/>} /> */}
 
